@@ -1,4 +1,4 @@
-let timeRemaining = 3600;
+let timeRemaining = 1800;
 const timerElement = document.getElementById('timer');
 const screenElement = document.getElementById('screen');
 const glitchVideo = document.getElementById('glitch-video');

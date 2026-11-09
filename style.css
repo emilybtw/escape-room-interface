@@ -22,6 +22,8 @@ body, html {
     height: 100%;
     object-fit: cover;
     z-index: 1;
+    image-rendering: -webkit- optimize-contast;
+    mix-blend-mode: screen;
 }
 
 glitch-video { z-index: 2; }
@@ -29,20 +31,78 @@ glitch-video { z-index: 2; }
 .ui-wrapper {
     position: absolute;
     z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
-    text-align: center;
-    top: 40%;
-    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90vw;
+    margin: 20px 0;
 }
 
 #timer {
-    font-size: 12rem;
-    color: #ff3333;
-    font-weight: bold;
-    text-shadow: 0 0 20px #ff0000;
+    font-size: 15rem;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    
+    color: transparent;
+    -webkit-text-stroke: 3px #ff1111;
+
+    font-weight: 900;
+    letter-spacing: 4px;
+
+    filter: drop-shadow(0 0 8px #ff0000)
+            drop-shadow(0 0 25px #ff0000)
 }
 
-.system-status { color: #ff9900; font-size: 2rem; letter-spacing: 5px; }
+.danger-icon {
+    position: fixed;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 9rem;
+    text-shadow: 0 0 20px #ffcc00;
+    z-index: 4;
+    animation: dangerFlicker 2.5s infinite linear;
+}
+
+.left-icon {
+    left: 4vw;
+}
+
+.right-icon {
+    right: 4vw;
+}
+
+.system-status {
+    color: #ff9900;
+    font-size: 2.5rem;
+    font-family: 'Impact', sans-serif;
+    letter-spacing: 8px;
+    margin: 0;
+    text-shadow: 0 0 10px #ff9900;
+}
+
+@keyframes iconPulse {
+    from {
+        transform: scale (0.95);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(1.08);
+        opactity: 1;
+    }
+}
 
 .penalty-flash {
     animation: flash 0.5s infinite alternate;
@@ -50,4 +110,8 @@ glitch-video { z-index: 2; }
 @keyframes flash {
     from { background-colour: rgba(255, 0, 0, 0); }
     to { background-colour: rgba(255,0,0,0.4); }
+}
+
+.hidden {
+    display: none !important;
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0":>
+    <title>Danger Screen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="screen-container" id="screen">
+        <video autoplay muted loop id="bg-video">
+            <source src="sci-fi-loop.mp4" type="video/mp4">
+        </video>
+        <video muted id="glitch-video" class="hidden">
+            <source src="glitch-overlay.mp4" type="video/mp4">
+        </video>
+
+        <div class="ui-wrapper">
+            <h1 class="system-status">SYSTEM CRITICAL</h1>
+            <div id="timer">60:00</div>
+            <div id="warning-text" class="hidden">TIME PENALTY DETECTED</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

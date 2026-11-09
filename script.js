@@ -51,3 +51,19 @@ window.addEventListener('keydown', (event) => {
         triggerTimePenalty(300);
     }
 });
+
+const socket = new WebSocket('ws://127.0.0.1:8080');
+
+socket.onopen = () => {
+    console.log("Main Clock Screen successfully linked to the game network server!");
+};
+
+socket.onmessage = (event) => {
+    alert("NETWORK BRIDGE SIGNAL ARRIVED! Raw Data inside: " + event.data);
+    const cleanMessage = String(event.data).trim();
+    if (cleanMessage === 'TRIGGER_PENALTY') {
+        triggerTimePenalty(300);
+    } else {
+        AudioListener("ERROR: The message received was '" + cleanMessage + "'which does not perfectly match 'TRIGGER_PENALTY'!");
+    }
+};

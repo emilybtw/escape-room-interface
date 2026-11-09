@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html land="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT ARCHIVE TERMINAL</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #58a6ff;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 40px;
+            margin: 0;
+        }
+        .terminal-header {
+            border-bottom: 2px solid #21262d;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 { color: #c9d1d9; margin: 0; font-size: 1.8rem; }
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(autio-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .file-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .file-card:hover {
+            background: #21262d;
+            border-color: #8b949e;
+            transform: translateY(-2px);
+        }
+        .file-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+        .file-name { color: #c9d1d9; font-weight: bold; font-size: 0.9rem; }
+
+        .corrupted { border-color: #da3637; }
+        .corrupted:hover { background: #3c1e21; border-color: #f85149; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #161b22;
+            border: 2px solid #30363d;
+            padding: 30px;
+            border-radius: 8px;
+            z-index: 10;
+            width: 50%;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0.0.0.0,7);
+            z-index: 9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="terminal-header">
+        <h1>📁 CLASSIFIED ARCHIVE SYSTEM // NODE_04</h1>
+        <p>STATUS: ACCESS GRANTED. CHOOSE A DATABASE FILE TO LOG.</p>
+    </div>
+
+    <div class="file-grid">
+        <div class="file-card" onclick="openFile('Incident Report 2024', 'Patient zero escaped quarentine at 0400 hours. Containment protocols failed completely.')">
+            <span class="file-icon">📄</span>
+            <div class="file-name">incedent_rpt_24.txt</div>
+        </div>
+        
+        <div class="file-card" onclick="openFile('Facility Schematics', 'The maintenance tunnels beneath sector 4 lead directly to the backup generator room.')">
+            <span class="file-icon">🗺️</span>
+            <div class="file-name">facility_map.dat</div>
+        </div>
+
+        <div class="file-card corrupted" onclick="triggerSystemTrap()">
+            <span class="file-icon">☣️</span>
+            <div class="file-name" style="color: #f85149;">CORRUPTED_CORE.exe>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
+    <div class="modal" id="fileModal">
+        <h2 id="modalTitle" style="color: #58a6ff; margin-top: 0;"></h2>
+        <p id="modalBody" style="color: #c9d1d9; line-height: 1.6"></p>
+        <button onclick="closeModal()" style="background: #21262d; color: white; border: 1px solid #30363d; padding: 8px 16px; cursor: pointer; border-radius: 4px;">Close File</button>
+        </div>
+
+        <script>
+
+        const socket = new WebSocket('ws://127.0.0.1:8080');
+
+            socket.onopen = () => {
+                console.log("🟢 SUCCESS: Archive Terminal successfully linked to port 8080!");
+            };
+
+            function openFile(title, text) {
+            document.getElemementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('fileModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            }
+
+            function closeModal() {
+                document.getElementById('fileModal').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
+
+            function triggerSystemTrap() {
+                alert("⚠️ CRITICAL ERROR: FIRING EXTRACTION COUNTERMEASURES!")
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.send('TRIGGER_PENALTY');
+                    alert("SENT: Data packet kicked out to the network server portal.");
+                } else {
+                    alert("❌ CRITICAL ERROR: The connection to the server is CLOSED. The buton cannot send anything!");
+                }
+            }
+        </script>
+    </body>
+    </html>

@@ -24,14 +24,21 @@ function displayTime() {
 }
 
 function triggerTimePenalty(secondsToSubtract) {
-    timeRemaining -= secondsToSubtract;
-    if (timeRemaining <0) timeRemaining = 0;
-    displayTime();
-
     glitchVideo.classList.remove('hidden');
     glitchVideo.play();
     screenElement.classList.add('penalty-flash');
     warningText.classList.remove('hidden');
+
+    let totalSubtracted = 0;
+    const rollbackInterval = setInterval(() => {
+        if (totalSubtracted < secondsToSubtract && timeRemaining >0) {
+            timeRemaining -= 5;
+            totalSubtracted += 5;
+            displayTime();
+        } else {
+            clearInterval(rollbackInterval);
+        }
+    }, 50);
 
     setTimeout(() => {
         glitchVideo.classList.add('hidden');

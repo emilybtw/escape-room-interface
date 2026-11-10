@@ -1,131 +1,210 @@
 <!DOCTYPE html>
-<html land="en">
+<html land="'en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="'UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT ARCHIVE TERMINAL</title>
+    <title>Project Archive Terminal</title>
     <style>
-        body {
-            background-color: #0d1117;
-            color: #58a6ff;
+        body, html {
+            background-color: #05080e;
+            color: #00ffcc;
             font-family: 'Courier New', Courier, monospace;
             padding: 40px;
             margin: 0;
+            overflow-x: hidden;
+            height: 100%;
         }
+
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba (0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0,06));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
         .terminal-header {
-            border-bottom: 2px solid #21262d;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0,2);
+            padding: 25px;
+            margin-bottom: 40px;
+            background: rgba(0, 20, 30, 0.6);
+            position: relative;
         }
-        h1 { color: #c9d1d9; margin: 0; font-size: 1.8rem; }
+
+        .terminal-header::after {
+            content: "SECURE NODE // CONNECTED";
+            position: absolute;
+            bottom: -10px; right: 20px;
+            background: #05080e;
+            padding: 0 10px;
+            font-size: 0.8rem;
+            color: #ff9900;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin: 0 0 10px;
+            font-size: 2rem;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px #00ffcc;
+        }
+
+        .status-pulse {
+            display: inline-block;
+            width: 10px; height: 10px;
+            background: #00ffcc;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1s infinite alternate;
+        }
+
         .file-grid {
             display: grid;
-            grid-template-columns: repeat(autio-fill, minmax(180px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
         }
+
         .file-card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 20px;
+            background: rgba(2, 12, 22, 0.8);
+            border: 1px solid #005577;
+            border-radius: 4px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            position: relative;
+            transition: all 0.2s ease-in-out;
+            box-shadow: inset 0 0 10px rgba(0, 85, 119, 0.3);
         }
-        .file-card:hover {
-            background: #21262d;
-            border-color: #8b949e;
-            transform: translateY(-2px);
-        }
-        .file-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
-        .file-name { color: #c9d1d9; font-weight: bold; font-size: 0.9rem; }
 
-        .corrupted { border-color: #da3637; }
-        .corrupted:hover { background: #3c1e21; border-color: #f85149; }
+        .file-card:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4), inset 0 0 15px rgba(0, 255, 204, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .file-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0,5)); }
+        .file-name { color: #ffffff; font-weight: bold; font-size: 0.96rem; letter-spacing: 1px; }
+
+        .file-card.corrupted {
+            border-color: #aa1111;
+            box-shadow: inset 0 0 10px rgba(170, 17, 17, 0.3);
+        }
+
+        .file-card.corrupted:hover {
+            border-color: #ff1111;
+            background: rgba(30, 5, 5, 0.8);
+            box-shadow: 0 0 25px rgba(255, 17, 17, 0.6), inset 0 0 15px rgba(255, 17, 17, 0.3);
+            color: #ff3333;
+        }
+
+        .file-card.corrupted:hover .file-name { color: #ff3333; }
+        .file-card.corrupted:hover .file-icon { filter: drop-shadow(0 0 8px #ff0000); }
 
         .modal {
             display: none;
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: #161b22;
-            border: 2px solid #30363d;
-            padding: 30px;
-            border-radius: 8px;
+            background: #020c16;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.5);
+            padding: 35px;
+            border-radius: 4px;
             z-index: 10;
-            width: 50%;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 55%;
         }
+
+        .modal h2 { font-family: 'Impact', sans-serif; letter-spacing: 2px; margin-top: 0; }
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0.0.0.0,7);
+            background: rgba(0. 5. 10. 0.85);
+            backdrop-filter: blue(4px);
             z-index: 9;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+            margin-top:  20px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #00ffcc;
+            color: #020c16;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+
+        @keyframes pulse {
+            from {opacity: 0.3; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
         }
     </style>
 </head>
 
 <body>
-    <div class="terminal-header">
-        <h1>📁 CLASSIFIED ARCHIVE SYSTEM // NODE_04</h1>
-        <p>STATUS: ACCESS GRANTED. CHOOSE A DATABASE FILE TO LOG.</p>
+    <div class="terminal header">
+        <h1>📁 DECRYPTED CORE STORAGE DATABASE</h1>
+        <p><span class="status-pulse"></span>SYSTEM STATUS: OVERRIDE ONLINE. SELECT ENCRYPTED LOG DATA.</p>
     </div>
 
     <div class="file-grid">
-        <div class="file-card" onclick="openFile('Incident Report 2024', 'Patient zero escaped quarentine at 0400 hours. Containment protocols failed completely.')">
-            <span class="file-icon">📄</span>
-            <div class="file-name">incedent_rpt_24.txt</div>
+        <div class="file-card" onclick="openFile('// FILE LOG: RE-INCIDENT_24', 'Patient zero broke active isolation boundaries at 0400 hours. High biological containment assets failed completely. Quarantine fallback sequence initiated.')">
+            <span class="file-icon">💾</span>
+            <div class="file-name">sec_incident_24.dat</div>
         </div>
-        
-        <div class="file-card" onclick="openFile('Facility Schematics', 'The maintenance tunnels beneath sector 4 lead directly to the backup generator room.')">
-            <span class="file-icon">🗺️</span>
-            <div class="file-name">facility_map.dat</div>
+
+        <div class="file-card" onclick="openFile('// ARCHIVE GRID: SCHEMATICS', 'Notice: Structural maintenance corridors trailing under sector 4 remain manual locks. Access paths bypass primary backup generation engine frameworks.')">
+            <span class="file-icon">📐</span>
+            <div class="file-name">sector_4_map.sys</div>
         </div>
 
         <div class="file-card corrupted" onclick="triggerSystemTrap()">
-            <span class="file-icon">☣️</span>
-            <div class="file-name" style="color: #f85149;">CORRUPTED_CORE.exe>
+            <span class="file-icon">🛑</span>
+            <div class="file-name">CRITICAL_CORE_BYPASS.exe</div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
-    <div class="modal" id="fileModal">
-        <h2 id="modalTitle" style="color: #58a6ff; margin-top: 0;"></h2>
-        <p id="modalBody" style="color: #c9d1d9; line-height: 1.6"></p>
-        <button onclick="closeModal()" style="background: #21262d; color: white; border: 1px solid #30363d; padding: 8px 16px; cursor: pointer; border-radius: 4px;">Close File</button>
-        </div>
+    <div class="modal-overlay" id="overlay" onclick="closemodal()"></div>
+    <div class="modal" id="fileMofal">
+        <h2 id="modalTitle"></h2>
+        <p id="modalBody" style="line-height: 1.8; color: #ffffff; font-size: 1.1rem;"></p>
+        <button class="close-btn" onclick="closeModal()">[ TERMINATE CONNECTION ]</button>
+    </div>
 
-        <script>
-
+    <script>
         const socket = new WebSocket('ws://127.0.0.1:8080');
 
-            socket.onopen = () => {
-                console.log("🟢 SUCCESS: Archive Terminal successfully linked to port 8080!");
-            };
-
-            function openFile(title, text) {
-            document.getElemementById('modalTitle').innerText = title;
+        function openFile(title, text) {
+            document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalBody').innerText = text;
             document.getElementById('fileModal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
-            }
+        }
 
-            function closeModal() {
-                document.getElementById('fileModal').style.display = 'none';
-                document.getElementById('overlay').style.display = 'none';
-            }
+        function closeModal() {
+            document.getElementById('fileModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
 
-            function triggerSystemTrap() {
-                alert("⚠️ CRITICAL ERROR: FIRING EXTRACTION COUNTERMEASURES!")
-                if (socket.readyState === WebSocket.OPEN) {
-                    socket.send('TRIGGER_PENALTY');
-                    alert("SENT: Data packet kicked out to the network server portal.");
-                } else {
-                    alert("❌ CRITICAL ERROR: The connection to the server is CLOSED. The buton cannot send anything!");
-                }
+        function triggerSystemTrap() {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send('TRIGGER_PENALTY');
             }
-        </script>
-    </body>
-    </html>
+        }
+    </script>
+
+</body>
+</html>

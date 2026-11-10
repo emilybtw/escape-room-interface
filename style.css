@@ -27,7 +27,7 @@ body, html {
     mix-blend-mode: screen;
 }
 
-glitch-video { z-index: 2; }
+#glitch-video { z-index: 2; }
 
 .ui-wrapper {
     position: absolute;

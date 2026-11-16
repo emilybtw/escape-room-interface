@@ -66,11 +66,24 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    alert("NETWORK BRIDGE SIGNAL ARRIVED! Raw Data inside: " + event.data);
     const cleanMessage = String(event.data).trim();
     if (cleanMessage === 'TRIGGER_PENALTY') {
         triggerTimePenalty(300);
-    } else {
-        AudioListener("ERROR: The message received was '" + cleanMessage + "'which does not perfectly match 'TRIGGER_PENALTY'!");
+    }
+    else if (cleanMessage === 'GAME_WON') {
+        clearInterval(countdown);
+
+        document.getElementById('bg-video').classList.add('hidden');
+
+        timerElement.innerText = "ACCESS GRANTED";
+        timerElement.style.fontSize = "10rem";
+        timerElement.style.webkitTextStroke = "3px #00ff99";
+        timerElement.style.filter = "drop-shadow(0 0 10px #00ff99) drop-shadow(0 0 35px #00ff99)";
+
+        document.querySelector('.system-status').innerText = "SYSTEM SECURED";
+        document.querySelector('.system-status').style.color = "#00ff99";
+        document.querySelector('.system-status').style.textShadow = "0 0 10px #00ff99";
+
+        console.log("VICTORY ROUTINE: Game successfully locked out.");
     }
 };

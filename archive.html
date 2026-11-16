@@ -257,52 +257,52 @@
                 <button class="cyber-btn" id="submitCode" style="width: 80% !important; display: block !important;">EXECUTE KEY</button>
             </div>
         </div>
-    </body>
+    
 
-<script>
-    const socket = new WebSocket('ws://127.0.0.1:8080');
+    <script>
+        const socket = new WebSocket('ws://127.0.0.1:8080');
 
-    function openFile(title, text) {
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalBody').innerText = text;
-        document.getElementById('fileModal').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('fileModal').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
-
-    function triggerSystemTrap() {
-        socket.send('TRIGGER_PENALTY');
-        console.log("Trap fired over the network!");
-    }
-
-    function verifyOverrideCode() {
-        const enteredCode =
-        document.getElementById('overrideCode').value/trim().toUpperCase();
-
-        if (enteredCode === '1111') {
-            alert("MASTER OVERRIDE ACCESS GRATED: STAGE DEACTIVATED.");
-            socket.send('GAME_WON');
+        function openFile(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('fileModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
         }
 
-        else if (enteredCode === 'RECOVERY') {
-            alert("SYSTEM RECOVERY: INJECTING 2-MINUTE REVENUE BUFFER.");
-            socket.send('ADD_TIME');
+        function closeModal() {
+            document.getElementById('fileModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
         }
 
-        else if (enteredCode === 'SHIELD') {
-            alert("DATA DEFENSES LINKED: BLOCKED SYSTEM ATTACKS.")
-        }
-
-        else {
-            alert("ACCESS DENIED: INVALID DECRYPTION DECOMPRESSION CODE.");
+        function triggerSystemTrap() {
             socket.send('TRIGGER_PENALTY');
+            console.log("Trap fired over the network!");
         }
 
-        document.getElementById('overrideCode').value = '';
-    }
-</script>
+        document.getElementById('submitCode').addEventListener('click', () => {
+            const enteredCode = document.getElementById('overrideCode').value.trim().toUpperCase();
+
+            if (enteredCode === '111') {
+                alert("MASTER OVERRIDE ACCESS GRATED: STAGE DEACTIVATED.");
+                socket.send('GAME_WON');
+            }
+
+            else if (enteredCode === 'RECOVERY') {
+                alert("SYSTEM RECOVERY: INJECTING 2-MINUTE REVENUE BUFFER.");
+                socket.send('ADD_TIME');
+            }
+
+            else if (enteredCode === 'SHIELD') {
+                alert("DATA DEFENSES LINKED: BLOCKED SYSTEM ATTACKS.")
+            }
+
+            else {
+                alert("ACCESS DENIED: INVALID DECRYPTION DECOMPRESSION CODE.");
+                socket.send('TRIGGER_PENALTY');
+            }
+
+            document.getElementById('overrideCode').value = '';
+        });
+    </script>
+</body>
 </html>
